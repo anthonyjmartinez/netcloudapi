@@ -48,6 +48,7 @@ Merge Request would represent. The versioning scheme we use is [SemVer](http://s
 *Note: Merge Requests lacking unit tests or documentation will not be accepted.*
 
 ## Style
+
 The NetCloudAPI project strives to maintain consistency and readability throughout. As such we recommend some of the
 following as resources to follow:
 
@@ -134,4 +135,5 @@ available at [http://contributor-covenant.org/version/1/4][version]
 [version]: http://contributor-covenant.org/version/1/4/
 
 ##Contributors
+
 Key project contributors are named [here](HUMANS.txt).
