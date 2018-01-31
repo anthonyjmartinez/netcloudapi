@@ -1,12 +1,15 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name="NetCloudAPI",
-    packages=["NetCloudAPI","endpoints"],
-    version="1.0.0",
+    packages=find_packages(),
+    include_package_data=True,
+    install_requires=["requests"],
+    test_suite="tests",
+    version="0.1.0",
     author="Anthony Martinez",
     author_email="anthony.martinez@gmail.com",
-    url="UPDATE THIS WITH A REAL URL",
+    url="https://collab.ajmartinez.com/amartinez/NetCloudAPI-py3",
     description="Python Interface for the Cradlepoint NetCloud API V2",
     classifiers=[
         "License :: OSI Approved :: MIT License",

@@ -1,0 +1,4 @@
+include LICENSE
+graft docs
+prune venv
+prune .git*
