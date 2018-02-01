@@ -5,7 +5,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=["requests"],
-    test_suite="tests",
     version="0.1.0",
     author="Anthony Martinez",
     author_email="anthony.martinez@gmail.com",
