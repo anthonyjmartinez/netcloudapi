@@ -176,9 +176,9 @@ def test_params_allowed_keys(test_endpoint):
 
 
 def test_params_value_type_check(test_endpoint):
-    """Test that AssertionError is raised if param values are incorrect type"""
+    """Test that ValueError is raised if param values are incorrect type"""
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         test_endpoint.params = badparams(test_endpoint._Endpoint__allowed_params)
 
 

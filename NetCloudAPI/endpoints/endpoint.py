@@ -27,34 +27,36 @@ class Endpoint(object):
 
     @staticmethod
     def __valchk__(passed, allowed, required=None, related=None):
+        """Validates passed values against defined allowed, required, or related known data"""
+
+        err = 0
         if passed is None:
-            return True
+            pass
 
         elif isinstance(passed, str) and isinstance(allowed, str):
             if passed == allowed:
-                return True
+                pass
             else:
-                return False
+                err += 1
 
         elif isinstance(passed, str) and isinstance(allowed, list):
             if passed in allowed:
-                return True
+                pass
             else:
-                return False
+                err += 1
 
         elif isinstance(passed, list) and isinstance(allowed, list):
             pset = set(passed)
             aset = set(allowed)
 
             if not bool(pset.difference(aset)):
-                return True
+                pass
             else:
-                return False
+                err += 1
 
         elif isinstance(passed, dict) and isinstance(allowed, dict):
             pkset = set(list(passed.keys()))
             akset = set(list(allowed.keys()))
-            err = 0
 
             if not bool(pkset.difference(akset)):
                 if related is not None:
@@ -88,10 +90,96 @@ class Endpoint(object):
             else:
                 err += 1
 
-            if err is 0:
-                return True
-            else:
-                return False
+        else:
+            err += 1
 
+        if err is 0:
+            return True
         else:
             return False
+
+    @property
+    def url(self):
+        return self.__url
+
+    @url.setter
+    def url(self, passed):
+        if passed is None:
+            self.__url = passed
+
+        elif self.__valchk__(passed, self.__base_url):
+            self.__url = passed
+
+        else:
+            raise ValueError("The URL is protected and must be {}"
+                             .format(self.__base_url))
+
+    @property
+    def method(self):
+        return self.__method
+
+    @method.setter
+    def method(self, passed):
+        if passed is None:
+            self.__url = passed
+
+        elif self.__valchk__(passed, self.__allowed_meths):
+            self.__method = passed
+
+        else:
+            raise ValueError("Invalid HTTP Method. Use one of: {}".
+                             format(self.__allowed_meths))
+
+    @property
+    def params(self):
+        return self.__params
+
+    @params.setter
+    def params(self, passed):
+        if passed is None:
+            self.__params = passed
+
+        elif self.__required_params is not None and self.__valchk__(passed,
+                                                                    self.__allowed_params,
+                                                                    required=self.__required_params):
+            self.__params = passed
+
+        elif self.__valchk__(passed, self.__allowed_params):
+            self.__params = passed
+
+        else:
+            raise ValueError("Invalid parameters. Allowed: {}, Required: {}".
+                             format(self.__allowed_params, self.__required_params))
+
+    @property
+    def filters(self):
+        return self.__filters
+
+    @filters.setter
+    def filters(self, passed):
+        if passed is None:
+            self.__filters = passed
+
+        elif self.__valchk__(passed,
+                             self.__allowed_filters,
+                             related=self.__allowed_params):
+            self.__filters = passed
+
+        else:
+            raise ValueError("Invalid filter keys or values. Allowed: {}, Related: {}".
+                             format(self.__allowed_filters, self.__allowed_params))
+
+    @property
+    def expands(self):
+        return self.__expands
+
+    @expands.setter
+    def expands(self, passed):
+        if passed is None:
+            self.__expands = passed
+
+        elif self.__valchk__(passed, self.__allowed_expands):
+            self.__expands = passed
+
+        else:
+            raise ValueError("Invalid expands values. Allowed: {}".format(self.__allowed_expands))
