@@ -121,7 +121,7 @@ class Endpoint(object):
     @method.setter
     def method(self, passed):
         if passed is None:
-            self.__url = passed
+            self.__method = passed
 
         elif self.__valchk__(passed, self.__allowed_meths):
             self.__method = passed
@@ -139,9 +139,11 @@ class Endpoint(object):
         if passed is None:
             self.__params = passed
 
-        elif self.__required_params is not None and self.__valchk__(passed,
-                                                                    self.__allowed_params,
-                                                                    required=self.__required_params):
+        elif (self.method == "POST" and
+              self.__required_params is not None
+              and self.__valchk__(passed,
+                                  self.__allowed_params,
+                                  required=self.__required_params)):
             self.__params = passed
 
         elif self.__valchk__(passed, self.__allowed_params):
