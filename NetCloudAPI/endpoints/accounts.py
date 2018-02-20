@@ -21,7 +21,12 @@ allowed_expands = ["account"]
 
 
 class Accounts(Endpoint):
-    def __init__(self):
+    def __init__(self,
+                 method=None,
+                 params=None,
+                 filters=None,
+                 expands=None):
+
         Endpoint.__init__(self,
                           base_url=url,
                           allowed_meths=allowed_meths,
@@ -29,3 +34,8 @@ class Accounts(Endpoint):
                           required_params=required_params,
                           allowed_filters=allowed_filters,
                           allowed_expands=allowed_expands)
+
+        self.method = method
+        self.params = params
+        self.filters = filters
+        self.expands = expands
