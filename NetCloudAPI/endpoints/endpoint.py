@@ -1,5 +1,6 @@
 import re
 
+
 class Endpoint(object):
     def __init__(self,
                  base_url=None,
@@ -139,12 +140,12 @@ class Endpoint(object):
         if passed is None:
             self.__params = passed
 
-        elif (self.method == "POST" and
-              self.__required_params is not None
-              and self.__valchk__(passed,
-                                  self.__allowed_params,
-                                  required=self.__required_params)):
-            self.__params = passed
+        elif self.method == "POST" and self.__required_params is not None:
+            if self.__valchk__(passed, self.__allowed_params, required=self.__required_params):
+                self.__params = passed
+            else:
+                raise ValueError("Invalid parameters. Allowed: {}, Required: {}".
+                                 format(self.__allowed_params, self.__required_params))
 
         elif self.__valchk__(passed, self.__allowed_params):
             self.__params = passed

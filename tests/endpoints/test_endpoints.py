@@ -4,9 +4,12 @@
 # various classes/functions/etc.
 
 from NetCloudAPI.endpoints.endpoint import Endpoint
+from NetCloudAPI.endpoints.accounts import Accounts
 import pytest
 import random
 import string
+import re
+
 
 def randstr(length):
     """Returns a random string of specified length"""
@@ -14,16 +17,28 @@ def randstr(length):
                     for i in range(length)])
 
 
-def badparams(params):
+def badparams(params, related=None):
     """Builds a parameters dictionary with bad value types"""
+
     if params is not None:
         p = {}
-        for k, v in params.items():
-            if v is str:
-                p.update({k: random.randint(0, 255)})
+        if related is None:
+            for k, v in params.items():
+                if v is str:
+                    p.update({k: random.randint(0, 255)})
 
-            elif v is int:
-                p.update({k: randstr(12)})
+                elif v is int:
+                    p.update({k: randstr(12)})
+
+        elif related is not None:
+            for k, v in params.items():
+                rk = re.split("__", k)[0]
+                rt = related.get(rk)
+                if rt is str:
+                    p.update({k: [random.randint(0, 255) for i in params]})
+
+                elif rt is int:
+                    p.update({k: [randstr(4) for i in params]})
 
     else:
         p = False
@@ -66,12 +81,17 @@ def badlist(allowed):
     elif isinstance(allowed[0], str):
         p = [random.randint(0, 255) for i in allowed]
 
+    else:
+        p = False
+
     return p
 
 
 @pytest.fixture(scope="module",
-                params=[Endpoint()],
-                ids=["Endpoint"])
+                params=[Endpoint(),
+                        Accounts()],
+                ids=["Endpoint",
+                     "Accounts"])
 def test_endpoint(request):
     return request.param
 
@@ -172,7 +192,7 @@ def test_params_allowed_keys(test_endpoint):
     """Test that ValueError is raised when invalid parameters are passed"""
 
     with pytest.raises(ValueError):
-        test_endpoint.params = {"{}".format(randstr(12)): random.randint(0,255)}
+        test_endpoint.params = {"{}".format(randstr(12)): random.randint(0, 255)}
 
 
 def test_params_value_type_check(test_endpoint):
@@ -186,7 +206,12 @@ def test_params_required_present(test_endpoint):
     """Test that ValueError is raised if fields required for POST requests are missing """
 
     with pytest.raises(ValueError):
+        if test_endpoint._Endpoint__allowed_meths is None:
+            test_endpoint._Endpoint__allowed_meths = ["POST"]
+
+        test_endpoint.method = "POST"
         required = test_endpoint._Endpoint__required_params
+
         test_endpoint.params = missingreq(required)
 
 
@@ -206,7 +231,9 @@ def test_filters_value_type_check(test_endpoint):
     """
 
     with pytest.raises(ValueError):
-        test_endpoint.filters = badparams(test_endpoint._Endpoint__allowed_filters)
+
+        test_endpoint.filters = badparams(test_endpoint._Endpoint__allowed_filters,
+                                          related=test_endpoint._Endpoint__allowed_params)
 
 
 def test_expands_value(test_endpoint):
