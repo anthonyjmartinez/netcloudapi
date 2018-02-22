@@ -3,8 +3,10 @@
 # Fixtures allow the same set of tests to be executed multiple times against
 # various classes/functions/etc.
 
-from NetCloudAPI.endpoints.endpoint import Endpoint
+from NetCloudAPI.endpoints.endpoint import Endpoint, Unsupported
 from NetCloudAPI.endpoints.accounts import Accounts
+from NetCloudAPI.endpoints.router_stream_usage_samples import RouterStreamUsageSamples
+from datetime import datetime
 import pytest
 import random
 import string
@@ -30,15 +32,42 @@ def badparams(params, related=None):
                 elif v is int:
                     p.update({k: randstr(12)})
 
+                elif v is float:
+                    p.update({k: randstr(12)})
+
+                elif v is datetime:
+                    p.update({k: randstr(12)})
+
+                elif v is Unsupported:
+                    p.update({k: randstr(4)})
+
+                elif v is bool:
+                    p.update({k: randstr(4)})
+
         elif related is not None:
             for k, v in params.items():
                 rk = re.split("__", k)[0]
                 rt = related.get(rk)
                 if rt is str:
-                    p.update({k: [random.randint(0, 255) for i in params]})
+                    if v is list:
+                        p.update({k: [random.randint(0, 255) for i in params]})
+                    else:
+                        p.update({k: random.randint(0, 255)})
 
                 elif rt is int:
-                    p.update({k: [randstr(4) for i in params]})
+                    if v is list:
+                        p.update({k: [randstr(4) for i in params]})
+                    else:
+                        p.update({k: randstr(4)})
+
+                elif rt is datetime:
+                    p.update({k: randstr(4)})
+
+                elif rt is Unsupported:
+                    p.update({k: randstr(4)})
+
+                elif rt is bool:
+                    p.update({k: randstr(4)})
 
     else:
         p = False
@@ -89,9 +118,11 @@ def badlist(allowed):
 
 @pytest.fixture(scope="module",
                 params=[Endpoint(),
-                        Accounts()],
+                        Accounts(),
+                        RouterStreamUsageSamples()],
                 ids=["Endpoint",
-                     "Accounts"])
+                     "Accounts",
+                     "RouterStreamUsageSamples"])
 def test_endpoint(request):
     return request.param
 
@@ -141,15 +172,15 @@ def test_valchk_dict_value_type():
     passed = badparams(allowed)
     ep = Endpoint()
 
-    assert ep.__valchk__(allowed, passed) is False
+    assert ep.__valchk__(passed, allowed) is False
 
 
 def test_valchk_dict_related():
     """Test that related element types are validated - expect False for bad data"""
 
-    allowed = {"test__in": list, "test2__in": list}
-    related = {"test": str, "test2": int}
-    passed = {"test__in": [1, 2, 3], "test2__in": ["a", "b", "c"]}
+    allowed = {"test__in": list, "test2__in": list, "created_at__gt": datetime}
+    related = {"test": str, "test2": int, "created_at": datetime}
+    passed = {"test__in": [1, 2, 3], "test2__in": ["a", "b", "c"], "created_at__gt": randstr(3)}
     ep = Endpoint()
 
     assert ep.__valchk__(passed, allowed, related=related) is False

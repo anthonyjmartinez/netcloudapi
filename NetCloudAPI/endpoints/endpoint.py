@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 
 class Endpoint(object):
@@ -62,13 +63,19 @@ class Endpoint(object):
             if not bool(pkset.difference(akset)):
                 if related is not None:
                     for k, v in passed.items():
-                        if isinstance(v, allowed.get(k)):
+                        if allowed.get(k) is datetime and isinstance(v, allowed.get(k)):
+                            pass
+
+                        elif isinstance(v, allowed.get(k)):
                             rk = re.split("__", k)[0]
                             for i in v:
                                 if isinstance(i, related.get(rk)):
                                     pass
                                 else:
                                     err += 1
+
+                        else:
+                            err += 1
 
                 elif required is not None:
                     reqkset = set(list(required.keys()))
@@ -186,3 +193,8 @@ class Endpoint(object):
 
         else:
             raise ValueError("Invalid expands values. Allowed: {}".format(self.__allowed_expands))
+
+
+class Unsupported:
+    """Placeholder for currently unsupported data types"""
+    pass
