@@ -6,12 +6,23 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, Unsupported
 from NetCloudAPI.endpoints.accounts import Accounts
 from NetCloudAPI.endpoints.router_stream_usage_samples import RouterStreamUsageSamples
+from NetCloudAPI.endpoints.routers import Routers
+from NetCloudAPI.endpoints.net_device_usage_samples import NetDeviceUsageSamples
+from NetCloudAPI.endpoints.router_state_samples import RouterStateSamples
+from NetCloudAPI.endpoints.router_logs import RouterLogs
+from NetCloudAPI.endpoints.router_alerts import RouterAlerts
+from NetCloudAPI.endpoints.net_device_signal_samples import NetDeviceSignalSamples
+from NetCloudAPI.endpoints.net_devices import NetDevices
+from NetCloudAPI.endpoints.groups import Groups
+from NetCloudAPI.endpoints.firmwares import Firmwares
+from NetCloudAPI.endpoints.configuration_managers import ConfigurationManagers
+from NetCloudAPI.endpoints.products import Products
+from NetCloudAPI.endpoints.reboot_activity import RebootActivity
 from datetime import datetime
 import pytest
 import random
 import string
 import re
-
 
 def randstr(length):
     """Returns a random string of specified length"""
@@ -119,10 +130,34 @@ def badlist(allowed):
 @pytest.fixture(scope="module",
                 params=[Endpoint(),
                         Accounts(),
-                        RouterStreamUsageSamples()],
+                        Routers(),
+                        RouterStreamUsageSamples(),
+                        RouterStateSamples(),
+                        NetDeviceUsageSamples(),
+                        RouterLogs(),
+                        RouterAlerts(),
+                        NetDeviceSignalSamples(),
+                        NetDevices(),
+                        Groups(),
+                        Firmwares(),
+                        ConfigurationManagers(),
+                        Products(),
+                        RebootActivity()],
                 ids=["Endpoint",
                      "Accounts",
-                     "RouterStreamUsageSamples"])
+                     "Routers",
+                     "RouterStreamUsageSamples",
+                     "RouterStateSamples",
+                     "NetDeviceUsageSamples",
+                     "RouterLogs",
+                     "RouterAlerts",
+                     "NetDeviceSignalSamples",
+                     "NetDevices",
+                     "Groups",
+                     "Firmwares",
+                     "ConfigurationManagers",
+                     "Products",
+                     "RebootActivity"])
 def test_endpoint(request):
     return request.param
 
@@ -272,3 +307,31 @@ def test_expands_value(test_endpoint):
 
     with pytest.raises(ValueError):
         test_endpoint.expands = False
+
+
+def test_fields_value(test_endpoint):
+    """Test that ValueError is raised if invalid fields values are passed."""
+
+    with pytest.raises(ValueError):
+        test_endpoint.filters = False
+
+
+def test_paging_allowed_keys(test_endpoint):
+    """Test that ValueError is raised when invalid paging parameters are passed"""
+
+    with pytest.raises(ValueError):
+        test_endpoint.paging = {"{}".format(randstr(4)): randstr(4)}
+
+
+def test_paging_value_type_check(test_endpoint):
+    """Test that ValueError is raised if paging values are incorrect type"""
+
+    with pytest.raises(ValueError):
+        test_endpoint.paging = badparams(test_endpoint._Endpoint__allowed_paging)
+
+
+def test_body(test_endpoint):
+    """Test that TypeError is raised if body cannot be converted to JSON"""
+
+    with pytest.raises(TypeError):
+        test_endpoint.body = {"bad": datetime(2018, 2, 22)}

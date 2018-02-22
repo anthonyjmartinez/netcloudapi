@@ -12,8 +12,6 @@ allowed_params = {"bytes_in": int,
                   "router": int,
                   "uptime": float}
 
-required_params = None
-
 allowed_filters = {"created_at__gt": datetime,
                    "created_at__lt": datetime,
                    "created_at_timeuuid__in": Unsupported,
@@ -23,25 +21,27 @@ allowed_filters = {"created_at__gt": datetime,
                    "created_at_timeuuid__lte": Unsupported,
                    "router__in": list}
 
-allowed_expands = None
-
 
 class RouterStreamUsageSamples(Endpoint):
     def __init__(self,
                  method=None,
                  params=None,
                  filters=None,
-                 expands=None):
+                 expands=None,
+                 fields=None,
+                 paging=None,
+                 body=None):
 
         Endpoint.__init__(self,
                           base_url=url,
                           allowed_meths=allowed_meths,
                           allowed_params=allowed_params,
-                          required_params=required_params,
-                          allowed_filters=allowed_filters,
-                          allowed_expands=allowed_expands)
+                          allowed_filters=allowed_filters)
 
         self.method = method
         self.params = params
         self.filters = filters
         self.expands = expands
+        self.fields = fields
+        self.paging = paging
+        self.body = body

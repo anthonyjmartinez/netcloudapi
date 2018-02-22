@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint
 
-url = "/api/v2/accounts"
+url = "/api/v2/accounts/"
 
 allowed_meths = ["GET", "POST", "PUT", "DELETE"]
 
-allowed_params = {"account": str,
+allowed_params = {"account": int,
                   "id": int,
                   "is_disabled": bool,
                   "name": str,
@@ -25,7 +25,10 @@ class Accounts(Endpoint):
                  method=None,
                  params=None,
                  filters=None,
-                 expands=None):
+                 expands=None,
+                 fields=None,
+                 paging=None,
+                 body=None):
 
         Endpoint.__init__(self,
                           base_url=url,
@@ -39,3 +42,6 @@ class Accounts(Endpoint):
         self.params = params
         self.filters = filters
         self.expands = expands
+        self.fields = fields
+        self.paging = paging
+        self.body = body

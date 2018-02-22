@@ -1,4 +1,5 @@
 import re
+import json
 from datetime import datetime
 
 
@@ -13,7 +14,10 @@ class Endpoint(object):
                  method=None,
                  params=None,
                  filters=None,
-                 expands=None):
+                 expands=None,
+                 fields=None,
+                 paging=None,
+                 body=None):
 
         self.__base_url = base_url
         self.__allowed_meths = allowed_meths
@@ -21,10 +25,14 @@ class Endpoint(object):
         self.__required_params = required_params
         self.__allowed_filters = allowed_filters
         self.__allowed_expands = allowed_expands
+        self.__allowed_paging = {"limit": int, "offset": int}
         self.method = method
         self.params = params
         self.filters = filters
         self.expands = expands
+        self.fields = fields
+        self.paging = paging
+        self.body = body
         self.url = base_url
 
     @staticmethod
@@ -193,6 +201,48 @@ class Endpoint(object):
 
         else:
             raise ValueError("Invalid expands values. Allowed: {}".format(self.__allowed_expands))
+
+    @property
+    def fields(self):
+        return self.__fields
+
+    @fields.setter
+    def fields(self, passed):
+        if passed is None:
+            self.__fields = passed
+
+        elif self.__valchk__(passed, self.__allowed_params):
+            self.__fields = passed
+
+        else:
+            raise ValueError("Invalid field selection. Allowed: {}".format(self.__allowed_params))
+
+    @property
+    def paging(self):
+        return self.__paging
+
+    @paging.setter
+    def paging(self, passed):
+        if passed is None:
+            self.__paging = passed
+
+        elif self.__valchk__(passed, self.__allowed_paging):
+            self.__paging = passed
+
+        else:
+            raise ValueError("Paging options are limited to integer values for 'limit' and 'offest'")
+
+    @property
+    def body(self):
+        return self.__body
+
+    @body.setter
+    def body(self, passed):
+        try:
+            self.__body = json.dumps(passed)
+
+        except TypeError as e:
+            raise TypeError("Invalid object passed to json.dumps(): {}".format(e))
 
 
 class Unsupported:
