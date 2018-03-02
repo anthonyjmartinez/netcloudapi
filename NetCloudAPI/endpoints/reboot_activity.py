@@ -1,8 +1,8 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint
 
-url = "/api/v2/reboot_activity/"
+URL = "/api/v2/reboot_activity/"
 
-allowed_meths = ["POST"]
+ALLOWED_METHS = ["POST"]
 
 
 class RebootActivity(Endpoint):
@@ -16,8 +16,8 @@ class RebootActivity(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS)
 
         self.method = method
         self.params = params

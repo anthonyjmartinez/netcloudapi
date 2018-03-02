@@ -1,15 +1,15 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint
 
-url = "/api/v2/products/"
+URL = "/api/v2/products/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"device_type": str,
+ALLOWED_PARAMS = {"device_type": str,
                   "id": int,
                   "resource_url": str,
                   "series": int}
 
-allowed_filters = {"device_type__in": list,
+ALLOWED_FILTERS = {"device_type__in": list,
                    "id__in": list}
 
 
@@ -24,10 +24,10 @@ class Products(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS)
 
         self.method = method
         self.params = params

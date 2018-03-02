@@ -1,10 +1,10 @@
-from NetCloudAPI.endpoints.endpoint import Endpoint, Unsupported, datetime
+from NetCloudAPI.endpoints.endpoint import Endpoint, datetime
 
-url = "/api/v2/net_device_metrics/"
+URL = "/api/v2/net_device_metrics/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"id": int,
+ALLOWED_PARAMS = {"id": int,
                   "resource_url": str,
                   "bytes_in": int,
                   "bytes_out": int,
@@ -20,12 +20,12 @@ allowed_params = {"id": int,
                   "update_ts": datetime,
                   "service_type": str}
 
-allowed_filters = {"update_ts__gt": datetime,
+ALLOWED_FILTERS = {"update_ts__gt": datetime,
                    "update_ts__lt": datetime,
                    "net_device__in": list}
 
 
-class NetDeviceUsageSamples(Endpoint):
+class NetDeviceMetrics(Endpoint):
     def __init__(self,
                  method=None,
                  params=None,
@@ -36,10 +36,10 @@ class NetDeviceUsageSamples(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS)
 
         self.method = method
         self.params = params

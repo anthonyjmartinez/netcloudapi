@@ -88,8 +88,8 @@ class Endpoint(object):
                 elif required is not None:
                     reqkset = set(list(required.keys()))
                     if not bool(reqkset.difference(pkset)):
-                        for k, v in passed.item():
-                            if isinstance(v, allowed(k)):
+                        for k, v in passed.items():
+                            if isinstance(v, allowed.get(k)):
                                 pass
                             else:
                                 err += 1
@@ -196,11 +196,11 @@ class Endpoint(object):
         if passed is None:
             self.__expands = passed
 
-        elif self.__valchk__(passed, self.__allowed_expands):
+        elif isinstance(passed, list) and self.__valchk__(passed, self.__allowed_expands):
             self.__expands = passed
 
         else:
-            raise ValueError("Invalid expands values. Allowed: {}".format(self.__allowed_expands))
+            raise ValueError("Invalid expand values. List required. Allowed: {}".format(self.__allowed_expands))
 
     @property
     def fields(self):
@@ -211,11 +211,11 @@ class Endpoint(object):
         if passed is None:
             self.__fields = passed
 
-        elif self.__valchk__(passed, self.__allowed_params):
+        elif isinstance(passed, list) and self.__valchk__(passed, list(self.__allowed_params.keys())):
             self.__fields = passed
 
         else:
-            raise ValueError("Invalid field selection. Allowed: {}".format(self.__allowed_params))
+            raise ValueError("Invalid field selection. List Required. Allowed: {}".format(self.__allowed_params))
 
     @property
     def paging(self):

@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, Unsupported, datetime
 
-url = "/api/v2/net_device_signal_samples/"
+URL = "/api/v2/net_device_signal_samples/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"cinr": float,
+ALLOWED_PARAMS = {"cinr": float,
                   "created_at": datetime,
                   "created_at_timeuuid": Unsupported,
                   "dbm": int,
@@ -17,7 +17,7 @@ allowed_params = {"cinr": float,
                   "sinr": float,
                   "uptime": float}
 
-allowed_filters = {"created_at__gt": datetime,
+ALLOWED_FILTERS = {"created_at__gt": datetime,
                    "created_at__lt": datetime,
                    "created_at_timeuuid__in": Unsupported,
                    "created_at_timeuuid__gt": Unsupported,
@@ -38,10 +38,10 @@ class NetDeviceSignalSamples(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS)
 
         self.method = method
         self.params = params

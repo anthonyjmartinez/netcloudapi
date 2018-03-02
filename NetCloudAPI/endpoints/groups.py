@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint
 
-url = "/api/v2/groups/"
+URL = "/api/v2/groups/"
 
-allowed_meths = ["GET", "POST", "PUT", "DELETE"]
+ALLOWED_METHS = ["GET", "POST", "PUT", "DELETE"]
 
-allowed_params = {"account": int,
+ALLOWED_PARAMS = {"account": int,
                   "configuration": str,
                   "device_type": str,
                   "id": int,
@@ -13,17 +13,17 @@ allowed_params = {"account": int,
                   "resource_url": str,
                   "target_configuration": str}
 
-required_params = {"account": str,
+REQUIRED_PARAMS = {"account": int,
                    "name": str,
                    "product": str,
                    "target_firmware": str}
 
-allowed_filters = {"account__in": list,
+ALLOWED_FILTERS = {"account__in": list,
                    "device_type__in": list,
                    "id__in": list,
                    "name__in": list}
 
-allowed_expands = ["account"]
+ALLOWED_EXPANDS = ["account"]
 
 
 class Groups(Endpoint):
@@ -37,12 +37,12 @@ class Groups(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          required_params=required_params,
-                          allowed_filters=allowed_filters,
-                          allowed_expands=allowed_expands)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          required_params=REQUIRED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS,
+                          allowed_expands=ALLOWED_EXPANDS)
 
         self.method = method
         self.params = params

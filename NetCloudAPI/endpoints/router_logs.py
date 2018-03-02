@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, Unsupported, datetime
 
-url = "/api/v2/router_logs/"
+URL = "/api/v2/router_logs/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"created_at": datetime,
+ALLOWED_PARAMS = {"created_at": datetime,
                   "created_at_timeuuid": Unsupported,
                   "exception": str,
                   "level": str,
@@ -14,7 +14,7 @@ allowed_params = {"created_at": datetime,
                   "sequence": int,
                   "source": str}
 
-allowed_filters = {"created_at__gt": datetime,
+ALLOWED_FILTERS = {"created_at__gt": datetime,
                    "created_at__lt": datetime,
                    "created_at_timeuuid__in": Unsupported,
                    "created_at_timeuuid__gt": Unsupported,
@@ -35,10 +35,10 @@ class RouterLogs(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS)
 
         self.method = method
         self.params = params

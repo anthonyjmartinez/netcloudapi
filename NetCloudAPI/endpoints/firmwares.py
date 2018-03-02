@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, datetime
 
-url = "/api/v2/firmwares/"
+URL = "/api/v2/firmwares/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"built_at": datetime,
+ALLOWED_PARAMS = {"built_at": datetime,
                   "hash": str,
                   "id": int,
                   "is_deprecated": bool,
@@ -15,7 +15,7 @@ allowed_params = {"built_at": datetime,
                   "url": str,
                   "version": str}
 
-allowed_filters = {"id__in": list,
+ALLOWED_FILTERS = {"id__in": list,
                    "version__in": list}
 
 
@@ -30,10 +30,10 @@ class Firmwares(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS)
 
         self.method = method
         self.params = params

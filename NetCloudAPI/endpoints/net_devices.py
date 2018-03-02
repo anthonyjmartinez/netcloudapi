@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, datetime
 
-url = "/api/v2/net_devices/"
+URL = "/api/v2/net_devices/"
 
-allowed_meths = ["GET"]
+ALLOWED_METHS = ["GET"]
 
-allowed_params = {"account": int,
+ALLOWED_PARAMS = {"account": int,
                   "bsid": str,
                   "carrier": str,
                   "carrier_id": str,
@@ -64,7 +64,7 @@ allowed_params = {"account": int,
                   "version": str,
                   "wimax_realm": str}
 
-allowed_filters = {"account__in": list,
+ALLOWED_FILTERS = {"account__in": list,
                    "connection_state__in": list,
                    "id__in": list,
                    "ipv4_address__in": list,
@@ -72,7 +72,7 @@ allowed_filters = {"account__in": list,
                    "router__in": list,
                    "net_device__in": list}
 
-allowed_expands = ["account", "router"]
+ALLOWED_EXPANDS = ["account", "router"]
 
 
 class NetDevices(Endpoint):
@@ -86,11 +86,11 @@ class NetDevices(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters,
-                          allowed_expands=allowed_expands)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS,
+                          allowed_expands=ALLOWED_EXPANDS)
 
         self.method = method
         self.params = params

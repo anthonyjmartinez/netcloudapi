@@ -1,10 +1,10 @@
 from NetCloudAPI.endpoints.endpoint import Endpoint, datetime
 
-url = "/api/v2/routers/"
+URL = "/api/v2/routers/"
 
-allowed_meths = ["GET", "PUT", "DELETE"]
+ALLOWED_METHS = ["GET", "PUT", "DELETE"]
 
-allowed_params = {"account": int,
+ALLOWED_PARAMS = {"account": int,
                   "actual_firmware": str,
                   "asset_id": str,
                   "config_status": str,
@@ -29,7 +29,7 @@ allowed_params = {"account": int,
                   "target_firmware": str,
                   "updated_at": datetime}
 
-allowed_filters = {"account__in": list,
+ALLOWED_FILTERS = {"account__in": list,
                    "device_type__in": list,
                    "group__in": list,
                    "id__in": list,
@@ -43,7 +43,7 @@ allowed_filters = {"account__in": list,
                    "updated_at__lt": datetime,
                    "updated_at__gt": datetime}
 
-allowed_expands = ["account", "group"]
+ALLOWED_EXPANDS = ["account", "group"]
 
 
 class Routers(Endpoint):
@@ -57,11 +57,11 @@ class Routers(Endpoint):
                  body=None):
 
         Endpoint.__init__(self,
-                          base_url=url,
-                          allowed_meths=allowed_meths,
-                          allowed_params=allowed_params,
-                          allowed_filters=allowed_filters,
-                          allowed_expands=allowed_expands)
+                          base_url=URL,
+                          allowed_meths=ALLOWED_METHS,
+                          allowed_params=ALLOWED_PARAMS,
+                          allowed_filters=ALLOWED_FILTERS,
+                          allowed_expands=ALLOWED_EXPANDS)
 
         self.method = method
         self.params = params
