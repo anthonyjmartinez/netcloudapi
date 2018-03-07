@@ -31,6 +31,7 @@ def req(endpoint=None, headers=None):
                                                                 REQUIRED_HEADERS,
                                                                 required=REQUIRED_HEADERS):
         if headers["Content-Type"] == "application/json":
+            ep_req.headers = headers
             for i in range(len(ep_attr)):
                 if ep_attr[i] == "url":
                     if endpoint.url is not None:

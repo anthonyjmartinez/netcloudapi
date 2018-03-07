@@ -30,12 +30,12 @@ def call(request, session=None):
             resp.update({"NetCloudAPI Error": response.status_code})
 
         elif resp["meta"]["next"]:
-            url = resp["meta"]["next"]
-            while url:
-                r_tmp = session.get(url, headers=request.headers).json()
+            request.url = resp["meta"]["next"]
+            while request.url:
+                r_tmp = session.send(request).json()
                 for row in r_tmp["data"]:
                     resp["data"].append(row)
-                url = next_url(r_tmp)
+                request.url = next_url(r_tmp)
 
         return resp
 
@@ -48,13 +48,14 @@ def call(request, session=None):
         return url
 
     if session is not None:
+        session.headers = request.headers
         resp_i = session.send(request)
         resp_f = resp_handler(request, session, resp_i)
 
     else:
         with Session() as s:
+            s.headers = request.headers
             resp_i = s.send(request)
-            resp_f = resp_handler(request, session, resp_i)
-            # print(resp.status_code, resp.json())
+            resp_f = resp_handler(request, s, resp_i)
 
     return resp_f
