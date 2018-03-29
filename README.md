@@ -30,11 +30,13 @@ https://pandas.pydata.org/
 
 ## Installation
 
-Update this once the package is complete
-Ideally the package should be released through PyPi
-The option should also be given to install directly from source maintained
-on the public GitLab site.
+Use pip from pypi.org:
 
+    pip install netcloudapi
+
+Or download the sdist from the project page:
+
+    pip install /your/path/to/netcloudapi-<version>.tar.gz
 
 ## Configuration
 
