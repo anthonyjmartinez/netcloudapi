@@ -1,11 +1,19 @@
+"""**NetCloudAPI.endpoints.endpoint provides the Endpoint superclass.**"""
+
 import re
 import json
 from datetime import datetime
 
 
 class Endpoint(object):
+    """Superclass for all Cradlepoint ECM API endpoint subclasses.
+
+    Setter methods validate structure and type, where applicable, based on
+    Cradlepoint ECM API reference documentation. Subclasses override the
+    init method to define subclass specific allowable fields and data types.
+    """
     def __init__(self,
-                 base_url=None,
+                 base_uri=None,
                  allowed_meths=None,
                  allowed_params=None,
                  required_params=None,
@@ -19,7 +27,7 @@ class Endpoint(object):
                  paging=None,
                  body=None):
 
-        self.__base_url = base_url
+        self.__base_uri = base_uri
         self.__allowed_meths = allowed_meths
         self.__allowed_params = allowed_params
         self.__required_params = required_params
@@ -33,7 +41,7 @@ class Endpoint(object):
         self.fields = fields
         self.paging = paging
         self.body = body
-        self.url = base_url
+        self.uri = base_uri
 
     @staticmethod
     def __valchk__(passed, allowed, required=None, related=None):
@@ -115,23 +123,40 @@ class Endpoint(object):
             return False
 
     @property
-    def url(self):
-        return self.__url
+    def uri(self):
+        """Class *uri* property getter/setter
 
-    @url.setter
-    def url(self, passed):
+        Returns:
+                The configured base URI (str).
+
+        Raises:
+                ValueError: If the setter attempts to change the uri.
+        """
+        return self.__uri
+
+    @uri.setter
+    def uri(self, passed):
         if passed is None:
-            self.__url = passed
+            self.__uri = passed
 
-        elif self.__valchk__(passed, self.__base_url):
-            self.__url = passed
+        elif self.__valchk__(passed, self.__base_uri):
+            self.__uri = passed
 
         else:
-            raise ValueError("The URL is protected and must be {}"
-                             .format(self.__base_url))
+            raise ValueError("The URI is protected and must be {}"
+                             .format(self.__base_uri))
 
     @property
     def method(self):
+        """Class *method* property getter/setter
+
+        Returns:
+            The configured HTTP request method (str)
+
+        Raises:
+            ValueError: If an invalid or unsupported method is passed to the setter.
+            ValueError: If the setter is passed a non-str object.
+        """
         return self.__method
 
     @method.setter
@@ -148,6 +173,17 @@ class Endpoint(object):
 
     @property
     def params(self):
+        """Class *params* property getter/setter
+
+        Returns:
+            The configured request parameters (dict)
+
+        Raises:
+            ValueError: If invalid parameter keys are passed to setter.
+            ValueError: If invalid parameter values are passed to setter.
+            ValueError: If method = 'POST' and required parameters are missing.
+            ValueError: If the setter is passed a non-dict object.
+        """
         return self.__params
 
     @params.setter
@@ -171,6 +207,16 @@ class Endpoint(object):
 
     @property
     def filters(self):
+        """Class *filters* property getter/setter
+
+        Returns:
+            The configured filter parameters (dict)
+
+        Raises:
+            ValueError: If invalid filter keys are passed to setter.
+            ValueError: If invalid filter values are passed to setter.
+            ValueError: If the setter is passed a non-dict object.
+        """
         return self.__filters
 
     @filters.setter
@@ -189,6 +235,16 @@ class Endpoint(object):
 
     @property
     def expands(self):
+        """Class *expands* property getter/setter.
+
+        Returns:
+            The configured expands parameters (list)
+
+        Raises:
+            ValueError: If invalid expands values are passed to setter.
+            ValueError: If the setter is passed a non-list object.
+
+        """
         return self.__expands
 
     @expands.setter
@@ -204,6 +260,16 @@ class Endpoint(object):
 
     @property
     def fields(self):
+        """Class *fields* property getter/setter
+
+        Returns:
+            The configured fields to fetch from the API (list)
+
+        Raises:
+            ValueError: If invalid fields are passed to the setter.
+            ValueError: If the setter is passed a non-list object.
+
+        """
         return self.__fields
 
     @fields.setter
@@ -219,6 +285,23 @@ class Endpoint(object):
 
     @property
     def paging(self):
+        """Class *paging* property getter/setter
+
+        *paging* accepts a dict with two keys:
+            * limit (int) - if omitted the API assumes '25'
+            * offset (int)
+
+        Use this to limit the number of calls made to the API for a given
+        operation.
+
+        Returns:
+            The configured paging settings (dict)
+
+        Raises:
+            ValueError: If invalid paging options are passed to the setter.
+            ValueError: If the setter is passed a non-dict object.
+
+        """
         return self.__paging
 
     @paging.setter
@@ -234,6 +317,15 @@ class Endpoint(object):
 
     @property
     def body(self):
+        """Class *body* property getter/setter
+
+        Returns:
+            The configured body object (dict)
+
+        Raises:
+            TypeError: If the the setter is passed a dict that causes an error\
+            from json.dumps()
+        """
         return self.__body
 
     @body.setter
@@ -245,6 +337,9 @@ class Endpoint(object):
             raise TypeError("Invalid object passed to json.dumps(): {}".format(e))
 
 
-class Unsupported:
-    """Placeholder for currently unsupported data types"""
+class Unsupported(object):
+    """Placeholder for currently unsupported data types
+
+    Currently used as the data type for all timeuuid fields.
+    """
     pass

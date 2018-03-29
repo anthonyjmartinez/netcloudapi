@@ -1,0 +1,1090 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to NetCloudAPI’s documentation! &#8212; NetCloudAPI v0.1.1a documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-netcloudapi-s-documentation">
+<h1>Welcome to NetCloudAPI’s documentation!<a class="headerlink" href="#welcome-to-netcloudapi-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-NetCloudAPI">
+<span id="netcloudapi-usage-and-methods"></span><h2>NetCloudAPI usage and methods<a class="headerlink" href="#module-NetCloudAPI" title="Permalink to this headline">¶</a></h2>
+<p><strong>NetCloudAPI provides an interface to the Cradlepoint ECM API.</strong></p>
+<p>NetCloudAPI provides a pythonic way to create and execute requests to the
+Cradlepoint ECM API v2. Each of the available endpoints is represented in
+classes of the <strong>NetCloudAPI.endpoints</strong> subpackage.</p>
+<dl class="docutils">
+<dt>NetCloudAPI imports the following functions:</dt>
+<dd><ul class="first last simple">
+<li>req() for building requests from Endpoints</li>
+<li>call() for sending requests to the API, and handling the responses</li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Pandas for data analysis</span>
+<span class="c1"># Not required for NetCloudAPI Use - but recommended</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">NetCloudAPI</span>
+<span class="kn">from</span> <span class="nn">NetCloudAPI.endpoints</span> <span class="k">import</span> <span class="n">Routers</span>
+
+<span class="c1"># NetCloud ECM Groups for subset of Routers</span>
+<span class="n">ecm_groups</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12345</span><span class="p">,</span>
+              <span class="mi">67891</span><span class="p">,</span>
+              <span class="mi">34567</span><span class="p">]</span>
+
+<span class="c1"># Request Headers with NetCloud ECM API IDs/Keys</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X-CP-API-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;your_cp_api_id&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-CP-API-KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;your_cp_api_key&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-ECM-API-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;your_ecm_api_id&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-ECM-API-KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;your_ecm_api_key&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
+
+<span class="n">router_ep</span> <span class="o">=</span> <span class="n">Routers</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;group__in&quot;</span><span class="p">:</span> <span class="n">ecm_groups</span><span class="p">},</span>
+                    <span class="n">paging</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">},</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;asset_id&quot;</span><span class="p">,</span> <span class="s2">&quot;mac&quot;</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">],</span>
+                    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">)</span>
+
+<span class="n">router_req</span> <span class="o">=</span> <span class="n">NetCloudAPI</span><span class="o">.</span><span class="n">req</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="n">router_ep</span><span class="p">,</span>
+                             <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+<span class="n">router_data</span> <span class="o">=</span> <span class="n">NetCloudAPI</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">router_req</span><span class="p">)</span>
+<span class="n">routers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">router_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+<span class="n">routers</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="s2">&quot;/some/arbitrary/path.xlsx&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The Cradlepoint ECM API requires authentication. It is necessary for users to
+have the appropriate Cradlepoint ECM API credentials for their account. Use of
+this package is not possible without the appropriate headers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X-CP-API-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;your_cp_api_id&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-CP-API-KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;your_cp_api_key&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-ECM-API-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;your_ecm_api_id&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;X-ECM-API-KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;your_ecm_api_key&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p class="last">If you do not have the credentials above contact your Cradlepoint ECM administrator
+and request them.</p>
+</div>
+<span class="target" id="module-NetCloudAPI.req"></span><p><strong>NetCloudAPI.req is the module that provides the NetCloudAPI.req() function.</strong></p>
+<p>NetCloudAPI.req.req() is imported by the NetCloudAPI package.</p>
+<dl class="data">
+<dt id="NetCloudAPI.req.BASE_URL">
+<code class="descclassname">NetCloudAPI.req.</code><code class="descname">BASE_URL</code><em class="property"> = 'https://www.cradlepointecm.com'</em><a class="headerlink" href="#NetCloudAPI.req.BASE_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the root of the URL for requests.PreparedRequest generation</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.req.REQUIRED_HEADERS">
+<code class="descclassname">NetCloudAPI.req.</code><code class="descname">REQUIRED_HEADERS</code><em class="property"> = {'Content-Type': &lt;class 'str'&gt;, 'X-CP-API-ID': &lt;class 'str'&gt;, 'X-CP-API-KEY': &lt;class 'str'&gt;, 'X-ECM-API-ID': &lt;class 'str'&gt;, 'X-ECM-API-KEY': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.req.REQUIRED_HEADERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the header dictionary keys and value types used for header validation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NetCloudAPI.req.req">
+<code class="descclassname">NetCloudAPI.req.</code><code class="descname">req</code><span class="sig-paren">(</span><em>endpoint=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.req.req" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares requests.PreparedRequest objects from passed args.</p>
+<p>Argument validation is featured in order to minimize the risk of invalid
+API calls. While both arguments default to None calling
+NetCloudAPI.req with empty arguments will raise an error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> (<a class="reference internal" href="#NetCloudAPI.endpoints.endpoint.Endpoint" title="NetCloudAPI.endpoints.endpoint.Endpoint"><em>Endpoint</em></a>) – Any one of the NetCloudAPI.endpoints subclasses</li>
+<li><strong>headers</strong> (<em>dict</em>) – The headers dictionary provided by Cradlepoint ECM.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A requests.PreparedRequest object if both arguments contain the required elements</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If attributes are None</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If header ‘Content-Type’ is not ‘application/json’</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If other invalid input is detected.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-NetCloudAPI.call"></span><p><strong>NetCloudAPI.call is the module that provides the NetCloudAPI.call() function.</strong></p>
+<p>NetCloudAPI.call.call() is imported by the NetCloudAPI package.</p>
+<dl class="function">
+<dt id="NetCloudAPI.call.call">
+<code class="descclassname">NetCloudAPI.call.</code><code class="descname">call</code><span class="sig-paren">(</span><em>request</em>, <em>session=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.call.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes remote API calls and returns JSON response data.</p>
+<p>Cradlepoint ECM API calls are made based on the passed requests.PreparedRequest
+object created by NetCloudAPI.req. The API response is analyzed for content
+signaling the success or failure of the request, as well as the need to make
+subsequent requests in order to retrieve all necessary data. This function
+will continue making requests and building the full JSON data object until
+all requested data has been retrieved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> (<em>requests.PreparedRequest</em>) – The successful results from NetCloudAPI.req().</li>
+<li><strong>session</strong> (<em>requests.Session</em><em>, </em><em>optional</em>) – An optional requests.Session object</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON object with the appropriate status code and data payload(s).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-NetCloudAPI.endpoints">
+<span id="netcloudapi-endpoints-documentation"></span><h2>NetCloudAPI.endpoints Documentation<a class="headerlink" href="#module-NetCloudAPI.endpoints" title="Permalink to this headline">¶</a></h2>
+<p><strong>NetCloudAPI.endpoints is a subpackage providing classes for Cradlepoint ECM API endpoints.</strong></p>
+<p>Each class features attribute validation on assignment to public
+attributes.</p>
+<dl class="docutils">
+<dt>NetCloudAPI.endpoints imports the following classes:</dt>
+<dd><ul class="first last simple">
+<li>Endpoint (superclass)</li>
+<li>Accounts (subclass)</li>
+<li>ConfigurationManagers (subclass)</li>
+<li>Firmwares (subclass)</li>
+<li>Groups (subclass)</li>
+<li>NetDeviceSignalSamples (subclass)</li>
+<li>NetDeviceUsageSamples (subclass)</li>
+<li>NetDeviceMetrics (subclass)</li>
+<li>NetDevices (subclass)</li>
+<li>Products (subclass)</li>
+<li>RebootActivity (subclass)</li>
+<li>RouterAlerts (subclass)</li>
+<li>RouterLogs (subclass)</li>
+<li>RouterStateSamples (subclass)</li>
+<li>RouterStreamUsageSamples (subclass)</li>
+<li>Routers (subclass)</li>
+</ul>
+</dd>
+</dl>
+<span class="target" id="module-NetCloudAPI.endpoints.endpoint"></span><p><strong>NetCloudAPI.endpoints.endpoint provides the Endpoint superclass.</strong></p>
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.endpoint.</code><code class="descname">Endpoint</code><span class="sig-paren">(</span><em>base_uri=None</em>, <em>allowed_meths=None</em>, <em>allowed_params=None</em>, <em>required_params=None</em>, <em>allowed_filters=None</em>, <em>allowed_expands=None</em>, <em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Superclass for all Cradlepoint ECM API endpoint subclasses.</p>
+<p>Setter methods validate structure and type, where applicable, based on
+Cradlepoint ECM API reference documentation. Subclasses override the
+init method to define subclass specific allowable fields and data types.</p>
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.uri">
+<code class="descname">uri</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>uri</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The configured base URI (str).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter attempts to change the uri.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.method">
+<code class="descname">method</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>method</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured HTTP request method (str)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If an invalid or unsupported method is passed to the setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-str object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.params">
+<code class="descname">params</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>params</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured request parameters (dict)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid parameter keys are passed to setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid parameter values are passed to setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If method = ‘POST’ and required parameters are missing.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-dict object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.filters">
+<code class="descname">filters</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>filters</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured filter parameters (dict)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid filter keys are passed to setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid filter values are passed to setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-dict object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.expands">
+<code class="descname">expands</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.expands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>expands</em> property getter/setter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured expands parameters (list)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid expands values are passed to setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-list object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.fields">
+<code class="descname">fields</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>fields</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured fields to fetch from the API (list)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid fields are passed to the setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-list object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.paging">
+<code class="descname">paging</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.paging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>paging</em> property getter/setter</p>
+<dl class="docutils">
+<dt><em>paging</em> accepts a dict with two keys:</dt>
+<dd><ul class="first last simple">
+<li>limit (int) - if omitted the API assumes ‘25’</li>
+<li>offset (int)</li>
+</ul>
+</dd>
+</dl>
+<p>Use this to limit the number of calls made to the API for a given
+operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The configured paging settings (dict)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If invalid paging options are passed to the setter.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the setter is passed a non-dict object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NetCloudAPI.endpoints.endpoint.Endpoint.body">
+<code class="descname">body</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Endpoint.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class <em>body</em> property getter/setter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The configured body object (dict)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If the the setter is passed a dict that causes an error            from json.dumps()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.endpoint.Unsupported">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.endpoint.</code><code class="descname">Unsupported</code><a class="headerlink" href="#NetCloudAPI.endpoints.endpoint.Unsupported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Placeholder for currently unsupported data types</p>
+<p>Currently used as the data type for all timeuuid fields.</p>
+</dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.accounts"></span><p><strong>NetCloudAPI.endpoints.accounts provides the Accounts subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.URI">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">URI</code><em class="property"> = '/api/v2/accounts/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET', 'POST', 'PUT', 'DELETE']</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'id': &lt;class 'int'&gt;, 'is_disabled': &lt;class 'bool'&gt;, 'name': &lt;class 'str'&gt;, 'resource_url': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.REQUIRED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">REQUIRED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'name': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.REQUIRED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the required params for the endpoint when method = “POST”.</p>
+<p>The params setter function validates based on this dictionary when method = “POST”.
+Keys passed to the setter must belong to the set of keys allowed in ALLOWED_PARAMS
+and include all REQUIRED_PARAMS. The corresponding value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'account__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;, 'name__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.accounts.ALLOWED_EXPANDS">
+<code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">ALLOWED_EXPANDS</code><em class="property"> = ['account']</em><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.ALLOWED_EXPANDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed expands for the endpoint</p>
+<p>The expands setter function validates based on this list, and the passed
+object <strong>must</strong> also be a list that is a set of the ALLOWED_EXPANDS values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.accounts.Accounts">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.accounts.</code><code class="descname">Accounts</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.accounts.Accounts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.configuration_managers"></span><p><strong>NetCloudAPI.endpoints.configuration_managers provides the
+ConfigurationManagers subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.configuration_managers.URI">
+<code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">URI</code><em class="property"> = '/api/v2/configuration_managers/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.configuration_managers.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET', 'PUT']</em><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.configuration_managers.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'actual': &lt;class 'str'&gt;, 'configuration': &lt;class 'str'&gt;, 'id': &lt;class 'int'&gt;, 'pending': &lt;class 'str'&gt;, 'resource_url': &lt;class 'str'&gt;, 'router': &lt;class 'int'&gt;, 'suspended': &lt;class 'bool'&gt;, 'synched': &lt;class 'bool'&gt;, 'target': &lt;class 'str'&gt;, 'version_number': &lt;class 'int'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.configuration_managers.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'account__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.configuration_managers.ALLOWED_EXPANDS">
+<code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">ALLOWED_EXPANDS</code><em class="property"> = ['account', 'router']</em><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.ALLOWED_EXPANDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed expands for the endpoint</p>
+<p>The expands setter function validates based on this list, and the passed
+object <strong>must</strong> also be a list that is a set of the ALLOWED_EXPANDS values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.configuration_managers.ConfigurationManagers">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.configuration_managers.</code><code class="descname">ConfigurationManagers</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.configuration_managers.ConfigurationManagers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.firmwares"></span><p><strong>NetCloudAPI.endpoints.firmwares provides the Firmwares subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.firmwares.URI">
+<code class="descclassname">NetCloudAPI.endpoints.firmwares.</code><code class="descname">URI</code><em class="property"> = '/api/v2/firmwares/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.firmwares.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.firmwares.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.firmwares.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.firmwares.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.firmwares.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.firmwares.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'built_at': &lt;class 'datetime.datetime'&gt;, 'hash': &lt;class 'str'&gt;, 'id': &lt;class 'int'&gt;, 'is_deprecated': &lt;class 'bool'&gt;, 'product': &lt;class 'str'&gt;, 'released_at': &lt;class 'datetime.datetime'&gt;, 'resource_url': &lt;class 'str'&gt;, 'uploaded_at': &lt;class 'datetime.datetime'&gt;, 'url': &lt;class 'str'&gt;, 'version': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.firmwares.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.firmwares.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.firmwares.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'id__in': &lt;class 'list'&gt;, 'version__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.firmwares.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.firmwares.Firmwares">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.firmwares.</code><code class="descname">Firmwares</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.firmwares.Firmwares" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.groups"></span><p><strong>NetCloudAPI.endpoints.groups provides the Groups subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.URI">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">URI</code><em class="property"> = '/api/v2/groups/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET', 'POST', 'PUT', 'DELETE']</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'configuration': &lt;class 'str'&gt;, 'device_type': &lt;class 'str'&gt;, 'id': &lt;class 'int'&gt;, 'name': &lt;class 'str'&gt;, 'product': &lt;class 'str'&gt;, 'resource_url': &lt;class 'str'&gt;, 'target_configuration': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.REQUIRED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">REQUIRED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'name': &lt;class 'str'&gt;, 'product': &lt;class 'str'&gt;, 'target_firmware': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.REQUIRED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the required params for the endpoint when method = “POST”.</p>
+<p>The params setter function validates based on this dictionary when method = “POST”.
+Keys passed to the setter must belong to the set of keys allowed in ALLOWED_PARAMS
+and include all REQUIRED_PARAMS. The corresponding value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'account__in': &lt;class 'list'&gt;, 'device_type__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;, 'name__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.groups.ALLOWED_EXPANDS">
+<code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">ALLOWED_EXPANDS</code><em class="property"> = ['account']</em><a class="headerlink" href="#NetCloudAPI.endpoints.groups.ALLOWED_EXPANDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed expands for the endpoint</p>
+<p>The expands setter function validates based on this list, and the passed
+object <strong>must</strong> also be a list that is a set of the ALLOWED_EXPANDS values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.groups.Groups">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.groups.</code><code class="descname">Groups</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.groups.Groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.net_device_metrics"></span><p><strong>NetCloudAPI.endpoints.net_device_metrics provides the NetDeviceMetrics subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_metrics.URI">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_metrics.</code><code class="descname">URI</code><em class="property"> = '/api/v2/net_device_metrics/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_metrics.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_metrics.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_metrics.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_metrics.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_metrics.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_metrics.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'bytes_in': &lt;class 'int'&gt;, 'bytes_out': &lt;class 'int'&gt;, 'cinr': &lt;class 'float'&gt;, 'dbm': &lt;class 'int'&gt;, 'ecio': &lt;class 'int'&gt;, 'id': &lt;class 'int'&gt;, 'net_device': &lt;class 'int'&gt;, 'resource_url': &lt;class 'str'&gt;, 'rsrp': &lt;class 'float'&gt;, 'rsrq': &lt;class 'float'&gt;, 'rssi': &lt;class 'int'&gt;, 'service_type': &lt;class 'str'&gt;, 'signal_strength': &lt;class 'int'&gt;, 'sinr': &lt;class 'float'&gt;, 'update_ts': &lt;class 'datetime.datetime'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_metrics.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_metrics.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_metrics.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'net_device__in': &lt;class 'list'&gt;, 'update_ts__gt': &lt;class 'datetime.datetime'&gt;, 'update_ts__lt': &lt;class 'datetime.datetime'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_metrics.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.net_device_metrics.NetDeviceMetrics">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.net_device_metrics.</code><code class="descname">NetDeviceMetrics</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_metrics.NetDeviceMetrics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.net_device_signal_samples"></span><p><strong>NetCloudAPI.endpoints.net_device_signal_samples provides the
+NetDeviceSignalSamples subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_signal_samples.URI">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_signal_samples.</code><code class="descname">URI</code><em class="property"> = '/api/v2/net_device_signal_samples/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_signal_samples.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_signal_samples.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_signal_samples.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'cinr': &lt;class 'float'&gt;, 'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'dbm': &lt;class 'int'&gt;, 'ecio': &lt;class 'int'&gt;, 'net_device': &lt;class 'int'&gt;, 'rsrp': &lt;class 'float'&gt;, 'rsrq': &lt;class 'float'&gt;, 'rssi': &lt;class 'int'&gt;, 'signal_percent': &lt;class 'int'&gt;, 'sinr': &lt;class 'float'&gt;, 'uptime': &lt;class 'float'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_signal_samples.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'net_device__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_signal_samples.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.net_device_signal_samples.NetDeviceSignalSamples">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.net_device_signal_samples.</code><code class="descname">NetDeviceSignalSamples</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_signal_samples.NetDeviceSignalSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.net_device_usage_samples"></span><p><strong>NetCloudAPI.endpoints.net_device_usage_samples provides the
+NetDeviceUsageSamples subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_usage_samples.URI">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_usage_samples.</code><code class="descname">URI</code><em class="property"> = '/api/v2/net_device_usage_samples/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_usage_samples.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_usage_samples.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_usage_samples.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'bytes_in': &lt;class 'int'&gt;, 'bytes_out': &lt;class 'int'&gt;, 'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'net_device': &lt;class 'int'&gt;, 'period': &lt;class 'float'&gt;, 'uptime': &lt;class 'float'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.net_device_usage_samples.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'net_device__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_usage_samples.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.net_device_usage_samples.NetDeviceUsageSamples">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.net_device_usage_samples.</code><code class="descname">NetDeviceUsageSamples</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.net_device_usage_samples.NetDeviceUsageSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.net_devices"></span><p><strong>NetCloudAPI.endpoints.net_devices provides the NetDevices subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_devices.URI">
+<code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">URI</code><em class="property"> = '/api/v2/net_devices/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_devices.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_devices.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'bsid': &lt;class 'str'&gt;, 'carrier': &lt;class 'str'&gt;, 'carrier_id': &lt;class 'str'&gt;, 'channel': &lt;class 'int'&gt;, 'connection_state': &lt;class 'str'&gt;, 'dns0': &lt;class 'str'&gt;, 'dns1': &lt;class 'str'&gt;, 'esn': &lt;class 'str'&gt;, 'gateway': &lt;class 'str'&gt;, 'gsn': &lt;class 'str'&gt;, 'homecarrid': &lt;class 'str'&gt;, 'hostname': &lt;class 'str'&gt;, 'iccid': &lt;class 'str'&gt;, 'id': &lt;class 'int'&gt;, 'imei': &lt;class 'str'&gt;, 'imsi': &lt;class 'str'&gt;, 'ipv4_address': &lt;class 'str'&gt;, 'is_asset': &lt;class 'bool'&gt;, 'is_gps_supported': &lt;class 'bool'&gt;, 'is_upgrade_available': &lt;class 'bool'&gt;, 'ltebandwidth': &lt;class 'str'&gt;, 'mac': &lt;class 'str'&gt;, 'manufacturer': &lt;class 'str'&gt;, 'mdn': &lt;class 'str'&gt;, 'meid': &lt;class 'str'&gt;, 'mfg_model': &lt;class 'str'&gt;, 'mfg_product': &lt;class 'str'&gt;, 'mn_ha_spi': &lt;class 'str'&gt;, 'mn_ha_ss': &lt;class 'str'&gt;, 'mode': &lt;class 'str'&gt;, 'model': &lt;class 'str'&gt;, 'model_fw': &lt;class 'str'&gt;, 'mtu': &lt;class 'int'&gt;, 'nai': &lt;class 'str'&gt;, 'name': &lt;class 'str'&gt;, 'netmask': &lt;class 'str'&gt;, 'pin_status': &lt;class 'str'&gt;, 'port': &lt;class 'str'&gt;, 'prlv': &lt;class 'str'&gt;, 'profile': &lt;class 'str'&gt;, 'resource_url': &lt;class 'str'&gt;, 'rfband': &lt;class 'str'&gt;, 'rfchannel': &lt;class 'str'&gt;, 'roam': &lt;class 'str'&gt;, 'router': &lt;class 'int'&gt;, 'rxchannel': &lt;class 'str'&gt;, 'serial': &lt;class 'str'&gt;, 'service_type': &lt;class 'str'&gt;, 'ssid': &lt;class 'str'&gt;, 'summary': &lt;class 'str'&gt;, 'txchannel': &lt;class 'str'&gt;, 'type': &lt;class 'str'&gt;, 'uid': &lt;class 'str'&gt;, 'updated_at': &lt;class 'datetime.datetime'&gt;, 'uptime': &lt;class 'float'&gt;, 'ver_pkg': &lt;class 'str'&gt;, 'version': &lt;class 'str'&gt;, 'wimax_realm': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_devices.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'account__in': &lt;class 'list'&gt;, 'connection_state__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;, 'ipv4_address__in': &lt;class 'list'&gt;, 'mode__in': &lt;class 'list'&gt;, 'net_device__in': &lt;class 'list'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.net_devices.ALLOWED_EXPANDS">
+<code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">ALLOWED_EXPANDS</code><em class="property"> = ['account', 'router']</em><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.ALLOWED_EXPANDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed expands for the endpoint</p>
+<p>The expands setter function validates based on this list, and the passed
+object <strong>must</strong> also be a list that is a set of the ALLOWED_EXPANDS values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.net_devices.NetDevices">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.net_devices.</code><code class="descname">NetDevices</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.net_devices.NetDevices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.products"></span><p><strong>NetCloudAPI.endpoints.products provides the Products subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.products.URI">
+<code class="descclassname">NetCloudAPI.endpoints.products.</code><code class="descname">URI</code><em class="property"> = '/api/v2/products/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.products.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.products.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.products.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.products.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.products.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.products.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'device_type__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.products.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.products.Products">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.products.</code><code class="descname">Products</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.products.Products" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.reboot_activity"></span><p><strong>NetCloudAPI.endpoints.reboot_activity provides the RebootActivity subclass</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.reboot_activity.URI">
+<code class="descclassname">NetCloudAPI.endpoints.reboot_activity.</code><code class="descname">URI</code><em class="property"> = '/api/v2/reboot_activity/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.reboot_activity.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.reboot_activity.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.reboot_activity.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['POST']</em><a class="headerlink" href="#NetCloudAPI.endpoints.reboot_activity.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.reboot_activity.RebootActivity">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.reboot_activity.</code><code class="descname">RebootActivity</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.reboot_activity.RebootActivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Endpoint supports only the “POST” method for specific JSON bodies.</p>
+<p>From the API Documentation:</p>
+<blockquote>
+<div><p>To reboot the router with id=42, post the payload:
+<code class="docutils literal notranslate"><span class="pre">{&quot;router&quot;:&quot;/api/v2/routers/42/&quot;}</span></code></p>
+<p>or using a full resource url (e.g., one obtained from the /api/v2/routers endpoint):
+<code class="docutils literal notranslate"><span class="pre">{&quot;router&quot;:&quot;http://www.cradlepointecm.com/api/v2/routers/42/&quot;}</span></code></p>
+<p>To reboot the group with id=24, post the payload:
+<code class="docutils literal notranslate"><span class="pre">{&quot;group&quot;:&quot;/api/v2/groups/24/&quot;}</span></code></p>
+<p>or using a full resource url (e.g., one obtained from the /api/v2/groups endpoint):
+<code class="docutils literal notranslate"><span class="pre">{&quot;group&quot;:&quot;http://www.cradlepointecm.com/api/v2/groups/24/&quot;}</span></code></p>
+</div></blockquote>
+</dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.router_alerts"></span><p><strong>NetCloudAPI.endpoints.router_alerts provides the RouterAlerts subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_alerts.URI">
+<code class="descclassname">NetCloudAPI.endpoints.router_alerts.</code><code class="descname">URI</code><em class="property"> = '/api/v2/router_alerts/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_alerts.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_alerts.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.router_alerts.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_alerts.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_alerts.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.router_alerts.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'detected_at': &lt;class 'datetime.datetime'&gt;, 'friendly_info': &lt;class 'str'&gt;, 'info': &lt;class 'str'&gt;, 'router': &lt;class 'int'&gt;, 'type': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_alerts.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_alerts.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.router_alerts.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_alerts.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.router_alerts.RouterAlerts">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.router_alerts.</code><code class="descname">RouterAlerts</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.router_alerts.RouterAlerts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.router_logs"></span><p><strong>NetCloudAPI.endpoints.router_logs provides the RouterLogs subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_logs.URI">
+<code class="descclassname">NetCloudAPI.endpoints.router_logs.</code><code class="descname">URI</code><em class="property"> = '/api/v2/router_logs/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_logs.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_logs.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.router_logs.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_logs.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_logs.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.router_logs.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'exception': &lt;class 'str'&gt;, 'level': &lt;class 'str'&gt;, 'message': &lt;class 'str'&gt;, 'reported_at': &lt;class 'datetime.datetime'&gt;, 'router': &lt;class 'int'&gt;, 'sequence': &lt;class 'int'&gt;, 'source': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_logs.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_logs.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.router_logs.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_logs.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.router_logs.RouterLogs">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.router_logs.</code><code class="descname">RouterLogs</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.router_logs.RouterLogs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.router_state_samples"></span><p><strong>NetCloudAPI.endpoints.router_state_samples provides the
+RouterStateSamples subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_state_samples.URI">
+<code class="descclassname">NetCloudAPI.endpoints.router_state_samples.</code><code class="descname">URI</code><em class="property"> = '/api/v2/router_state_samples/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_state_samples.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_state_samples.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.router_state_samples.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_state_samples.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_state_samples.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.router_state_samples.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'period': &lt;class 'float'&gt;, 'router': &lt;class 'int'&gt;, 'state': &lt;class 'str'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_state_samples.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_state_samples.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.router_state_samples.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_state_samples.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.router_state_samples.RouterStateSamples">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.router_state_samples.</code><code class="descname">RouterStateSamples</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.router_state_samples.RouterStateSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.router_stream_usage_samples"></span><p><strong>NetCloudAPI.endpoints.router_stream_usage_samples provides the
+RouterStreamUsageSamples subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_stream_usage_samples.URI">
+<code class="descclassname">NetCloudAPI.endpoints.router_stream_usage_samples.</code><code class="descname">URI</code><em class="property"> = '/api/v2/router_stream_usage_samples/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_stream_usage_samples.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.router_stream_usage_samples.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET']</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The method setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.router_stream_usage_samples.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'bytes_in': &lt;class 'int'&gt;, 'bytes_out': &lt;class 'int'&gt;, 'created_at': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'period': &lt;class 'float'&gt;, 'router': &lt;class 'int'&gt;, 'uptime': &lt;class 'float'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.router_stream_usage_samples.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'created_at__gt': &lt;class 'datetime.datetime'&gt;, 'created_at__lt': &lt;class 'datetime.datetime'&gt;, 'created_at_timeuuid__gt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__gte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__in': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lt': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'created_at_timeuuid__lte': &lt;class 'NetCloudAPI.endpoints.endpoint.Unsupported'&gt;, 'router__in': &lt;class 'list'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.router_stream_usage_samples.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.router_stream_usage_samples.RouterStreamUsageSamples">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.router_stream_usage_samples.</code><code class="descname">RouterStreamUsageSamples</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.router_stream_usage_samples.RouterStreamUsageSamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-NetCloudAPI.endpoints.routers"></span><p><strong>NetCloudAPI.endpoints.routers provides the Routers subclass.</strong></p>
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.routers.URI">
+<code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">URI</code><em class="property"> = '/api/v2/routers/'</em><a class="headerlink" href="#NetCloudAPI.endpoints.routers.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the uri to append to BASE_URL from NetCloudAPI.req</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.routers.ALLOWED_METHS">
+<code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">ALLOWED_METHS</code><em class="property"> = ['GET', 'PUT', 'DELETE']</em><a class="headerlink" href="#NetCloudAPI.endpoints.routers.ALLOWED_METHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed methods for the endpoint.</p>
+<p>Only one method from this list may be set at a time. The <em>method</em> setter
+function validates based on this list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.routers.ALLOWED_PARAMS">
+<code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">ALLOWED_PARAMS</code><em class="property"> = {'account': &lt;class 'int'&gt;, 'actual_firmware': &lt;class 'str'&gt;, 'asset_id': &lt;class 'str'&gt;, 'config_status': &lt;class 'str'&gt;, 'created_at': &lt;class 'datetime.datetime'&gt;, 'custom1': &lt;class 'str'&gt;, 'custom2': &lt;class 'str'&gt;, 'description': &lt;class 'str'&gt;, 'device_type': &lt;class 'str'&gt;, 'full_product_name': &lt;class 'str'&gt;, 'group': &lt;class 'int'&gt;, 'id': &lt;class 'int'&gt;, 'ipv4_address': &lt;class 'str'&gt;, 'locality': &lt;class 'str'&gt;, 'mac': &lt;class 'str'&gt;, 'name': &lt;class 'str'&gt;, 'product': &lt;class 'str'&gt;, 'reboot_required': &lt;class 'bool'&gt;, 'resource_url': &lt;class 'str'&gt;, 'serial_number': &lt;class 'str'&gt;, 'state': &lt;class 'str'&gt;, 'state_updated_at': &lt;class 'datetime.datetime'&gt;, 'target_firmware': &lt;class 'str'&gt;, 'updated_at': &lt;class 'datetime.datetime'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.routers.ALLOWED_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed params for the endpoint.</p>
+<p>The params setter function validates based on this dictionary. Keys passed
+to the setter must belong to the set of keys allowed, and the corresponding
+value types must match.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.routers.ALLOWED_FILTERS">
+<code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">ALLOWED_FILTERS</code><em class="property"> = {'account__in': &lt;class 'list'&gt;, 'device_type__in': &lt;class 'list'&gt;, 'group__in': &lt;class 'list'&gt;, 'id__in': &lt;class 'list'&gt;, 'ipv4_address__in': &lt;class 'list'&gt;, 'mac__in': &lt;class 'list'&gt;, 'name__in': &lt;class 'list'&gt;, 'reboot_required__in': &lt;class 'list'&gt;, 'state__in': &lt;class 'list'&gt;, 'state_updated_at__gt': &lt;class 'datetime.datetime'&gt;, 'state_updated_at__lt': &lt;class 'datetime.datetime'&gt;, 'updated_at__gt': &lt;class 'datetime.datetime'&gt;, 'updated_at__lt': &lt;class 'datetime.datetime'&gt;}</em><a class="headerlink" href="#NetCloudAPI.endpoints.routers.ALLOWED_FILTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed filters for the endpoint.</p>
+<p>The filters setter function validates based on this dictionary, and the
+related ALLOWED_PARAMS dictionary. All list elements must match the
+corresponding ALLOWED_PARAMS type for the key preceding the ‘__’ within
+the ALLOWED_FILTERS dictionary key. A subset of the allowed keys may be passed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="NetCloudAPI.endpoints.routers.ALLOWED_EXPANDS">
+<code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">ALLOWED_EXPANDS</code><em class="property"> = ['account', 'group']</em><a class="headerlink" href="#NetCloudAPI.endpoints.routers.ALLOWED_EXPANDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the allowed expands for the endpoint</p>
+<p>The expands setter function validates based on this list, and the passed
+object <strong>must</strong> also be a list that is a set of the ALLOWED_EXPANDS values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="NetCloudAPI.endpoints.routers.Routers">
+<em class="property">class </em><code class="descclassname">NetCloudAPI.endpoints.routers.</code><code class="descname">Routers</code><span class="sig-paren">(</span><em>method=None</em>, <em>params=None</em>, <em>filters=None</em>, <em>expands=None</em>, <em>fields=None</em>, <em>paging=None</em>, <em>body=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NetCloudAPI.endpoints.routers.Routers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to NetCloudAPI’s documentation!</a><ul>
+<li><a class="reference internal" href="#module-NetCloudAPI">NetCloudAPI usage and methods</a></li>
+<li><a class="reference internal" href="#module-NetCloudAPI.endpoints">NetCloudAPI.endpoints Documentation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Anthony Martinez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

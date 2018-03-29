@@ -58,7 +58,7 @@ def test_call_response_json_obj(headers, accounts, adapter, session):
     accounts.params = {"account": 999}
     ep_req = req(endpoint=accounts, headers=headers)
 
-    assert isinstance(call(ep_req, session=session), dict) & isinstance(call(ep_req), dict)
+    assert isinstance(call(ep_req, session=session), dict)
 
 
 def test_call_response_to_error_codes(headers, accounts, adapter, session):
@@ -102,7 +102,7 @@ def test_call_response_no_next(headers, accounts, adapter, session):
     accounts.params = {"account": 999}
     ep_req = req(endpoint=accounts, headers=headers)
 
-    assert (call(ep_req, session=session)["meta"]["limit"] == 20) & isinstance(call(ep_req), dict)
+    assert call(ep_req, session=session)["meta"]["limit"] == 20
 
 
 def test_call_response_with_next(headers, accounts, adapter, session):
@@ -137,4 +137,4 @@ def test_call_response_with_next(headers, accounts, adapter, session):
     accounts.params = {"account": 999}
     ep_req = req(endpoint=accounts, headers=headers)
 
-    assert (len(call(ep_req, session=session)["data"]) == 2) & isinstance(call(ep_req), dict)
+    assert len(call(ep_req, session=session)["data"]) == 2

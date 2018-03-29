@@ -1,7 +1,8 @@
 # Contributing
 
 Whether you have come to report issues, request features, or contribute code, thanks in advance for your interest in,
-and contribution(s) to, NetCloudAPI.
+and contribution(s) to, NetCloudAPI. If anyone is interested in making the documentation more user friendly,
+we welcome your efforts with open arms.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
@@ -15,8 +16,6 @@ Given the limited resources of the development team there may be a delay in resp
 and merge requests. That said, it is the aim of the project to provide responses to all reasonable community
 interactions. Requests that violate the project Code of Conduct are subject to immediate removal, and any other actions
 deemed appropriate by the project team.
-
-Templates are provided within the project's GitLab page for each of the following:
 
 ### Issues
 
@@ -40,9 +39,8 @@ unless, or until, the development team agrees to a change of scope.*
 
 1. Rebase your branch from Master, execute all unit tests, and provide a passing validation report immediately prior to
 creating a Merge Request
-2. Update the README.txt, using Windows CRLF for compatibility with Windows users, with details of changes to the
-interface, and any additional dependencies.
-3. Increase the version numbers in any files (setup.py, etc.), and the README.txt, to the new version that this
+2. Update the README.md with details of changes to the interface, and any additional dependencies.
+3. Increase the version numbers in any files (setup.py, etc.), and the README.md, to the new version that this
 Merge Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
 
 *Note: Merge Requests lacking unit tests or documentation will not be accepted.*

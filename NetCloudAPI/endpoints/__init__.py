@@ -1,3 +1,27 @@
+"""**NetCloudAPI.endpoints is a subpackage providing classes for Cradlepoint ECM API endpoints.**
+
+Each class features attribute validation on assignment to public
+attributes.
+
+NetCloudAPI.endpoints imports the following classes:
+    * Endpoint (superclass)
+    * Accounts (subclass)
+    * ConfigurationManagers (subclass)
+    * Firmwares (subclass)
+    * Groups (subclass)
+    * NetDeviceSignalSamples (subclass)
+    * NetDeviceUsageSamples (subclass)
+    * NetDeviceMetrics (subclass)
+    * NetDevices (subclass)
+    * Products (subclass)
+    * RebootActivity (subclass)
+    * RouterAlerts (subclass)
+    * RouterLogs (subclass)
+    * RouterStateSamples (subclass)
+    * RouterStreamUsageSamples (subclass)
+    * Routers (subclass)
+"""
+
 from .accounts import Accounts
 from .configuration_managers import ConfigurationManagers
 from .endpoint import Endpoint

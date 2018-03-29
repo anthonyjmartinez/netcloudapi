@@ -231,11 +231,11 @@ def test_valchk_dict_required():
     assert ep.__valchk__(passed, allowed, required=required) is False
 
 
-def test_valid_endpoint_url(test_endpoint):
+def test_valid_endpoint_uri(test_endpoint):
     """Test that ValueError is raised if the endpoint URL is incorrect"""
 
     with pytest.raises(ValueError):
-        test_endpoint.url = False
+        test_endpoint.uri = False
 
 
 def test_valid_method(test_endpoint):
