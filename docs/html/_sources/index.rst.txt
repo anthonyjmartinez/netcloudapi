@@ -54,9 +54,6 @@ NetCloudAPI.endpoints Documentation
 .. automodule:: NetCloudAPI.endpoints.routers
     :members:
 
-
-
-
 Indices and tables
 ==================
 

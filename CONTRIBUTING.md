@@ -13,7 +13,7 @@ development of tools that leverage that API. At this time, direct *processing* o
 
 ## Requests
 Given the limited resources of the development team there may be a delay in response to issues, feature requests,
-and merge requests. That said, it is the aim of the project to provide responses to all reasonable community
+and pull requests. That said, it is the aim of the project to provide responses to all reasonable community
 interactions. Requests that violate the project Code of Conduct are subject to immediate removal, and any other actions
 deemed appropriate by the project team.
 
@@ -24,7 +24,7 @@ With any issue submission please include the following:
 * Detailed steps to reproduce the issue, including but not limited to:
     * Local environment configuration
     * Specific use case for the classes or methods in question
-* Direct reference to any merge requests submitted to resolve the reported issue
+* Direct reference to any pull requests submitted to resolve the reported issue
 
 ### Features
 
@@ -35,15 +35,15 @@ For all feature requests please include the following:
 *Note: Feature requests that are outside of the declared project scope are unlikely to enter the development queue
 unless, or until, the development team agrees to a change of scope.*
 
-### Merge Request Process
+### Pull Request Process
 
 1. Rebase your branch from Master, execute all unit tests, and provide a passing validation report immediately prior to
-creating a Merge Request
+creating a Pull Request
 2. Update the README.md with details of changes to the interface, and any additional dependencies.
 3. Increase the version numbers in any files (setup.py, etc.), and the README.md, to the new version that this
-Merge Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
+Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
 
-*Note: Merge Requests lacking unit tests or documentation will not be accepted.*
+*Note: Pull Requests lacking unit tests or documentation will not be accepted.*
 
 ## Style
 

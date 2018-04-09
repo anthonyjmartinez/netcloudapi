@@ -5,7 +5,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=["requests"],
-    version="0.1.2-a.1",
+    version="0.1.2-a.2",
     author="Anthony Martinez",
     author_email="anthony.martinez@gmail.com",
     url="https://github.com/anthonyjmartinez/netcloudapi",
