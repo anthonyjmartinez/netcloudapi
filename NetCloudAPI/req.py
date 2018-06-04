@@ -35,7 +35,7 @@ def req(endpoint=None, headers=None):
     Raises:
         ValueError: If attributes are None
         ValueError: If header 'Content-Type' is not 'application/json'
-        ValueError: If other invalid input is detected.
+        TypeError: If other invalid input is detected.
     """
     ep_req = Request()
     ep_attr = ["uri",
@@ -51,6 +51,9 @@ def req(endpoint=None, headers=None):
 
     if endpoint is None or headers is None:
         raise ValueError("""args are required; endpoint and headers must be passed""")
+
+    elif not Endpoint.__valchk__(headers, REQUIRED_HEADERS, required=REQUIRED_HEADERS):
+        raise ValueError("""Required header keys are missing. See docs""")
 
     elif isinstance(endpoint, Endpoint) and Endpoint.__valchk__(headers,
                                                                 REQUIRED_HEADERS,
@@ -108,6 +111,6 @@ def req(endpoint=None, headers=None):
             raise ValueError("Content-Type must be 'application/json'")
 
     else:
-        raise ValueError("""Invalid input. See docs.""")
+        raise TypeError("""Invalid input. See docs.""")
 
     return ep_req.prepare()

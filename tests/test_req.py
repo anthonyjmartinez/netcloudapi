@@ -123,9 +123,9 @@ def test_endpoint():
 
 
 def test_req_input_endpoint_obj():
-    """Test that ValueError is raised if the passed endpoint is not a valid Endpoint object"""
+    """Test that TypeError is raised if the passed endpoint is not a valid Endpoint object"""
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         headers = {"X-CP-API-ID": "test",
                    "X-CP-API-KEY": "test",
                    "X-ECM-API-ID": "test",
