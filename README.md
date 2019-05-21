@@ -1,3 +1,7 @@
+# Package Not Maintained
+
+Note that this package has not been maintained since mid-2018.
+
 ## Introduction
 
 NetCloudAPI provides a Python 3 interface to the Cradlepoint NetCloud API
